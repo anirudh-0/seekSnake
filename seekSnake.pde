@@ -1,12 +1,16 @@
 Follower head = new Follower(new PVector(50, 50));
 Follower [] body = new Follower[15];
 Food[] f = new Food[15];
+boolean record = false;
+boolean toggle = false;
 
 void setup() {
   //size(600, 400);
   fullScreen();
   colorMode(HSB);
   noStroke();
+  //frameRate(2);
+
   head.maxForce = 0.12;
   for (int i =0; i<body.length; i++) {
     body[i] = new Follower(head.pos);
@@ -44,22 +48,28 @@ void draw() {
     body[i].update();
     body[i].show();
   }
+  if (record && toggle) {
+    saveFrame("images/a-####.jpg");
+  }
 }
 
 Food find() {
   Food a = f[0];
   float minD = head.pos.dist(a.pos);
   float d;
-  
+
   for (int i =0; i<f.length; i++) {
     d = f[i].pos.dist(head.pos)-head.size;
-    if(d<minD){
-     minD=d;
-     a = f[i];
+    if (d<minD) {
+      minD=d;
+      a = f[i];
     }
-    if(d<=0){
-     f[i] = new Food(); 
+    if (d<=0) {
+      f[i] = new Food();
     }
   }
   return a;
+}
+void mousePressed() {
+  toggle = !toggle;
 }
